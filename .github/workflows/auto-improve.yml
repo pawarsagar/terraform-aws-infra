@@ -1,0 +1,32 @@
+name: Auto-Format & Improve
+
+# Keeps the codebase tidy without human intervention:
+# runs terraform fmt on a schedule and commits any drift straight back.
+
+on:
+  schedule:
+    - cron: '0 3 * * 1'   # every Monday, 03:00 UTC
+  workflow_dispatch: {}
+
+jobs:
+  fmt:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.7.0
+
+      - name: Terraform fmt (auto-fix)
+        run: terraform fmt -recursive
+
+      - name: Commit formatting fixes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-format terraform files"
+          branch: main
+          commit_user_name: "repo-bot"
+          commit_user_email: "actions@github.com"
