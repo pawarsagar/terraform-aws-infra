@@ -24,7 +24,7 @@ jobs:
         run: terraform fmt -recursive
 
       - name: Commit formatting fixes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "chore: auto-format terraform files"
           branch: main
